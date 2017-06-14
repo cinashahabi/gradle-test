@@ -1,19 +1,40 @@
-// GRADLEFILE
+apply plugin: 'java'
+apply plugin: 'application'
 
-description="Project for a Gradle plugin build"
-task hello {
-    group 'greeting'
-    description 'Greets you.'
-    doLast { println 'Hello! How are you doing?' }
+mainClassName = "javaApp.WordSplit"
+
+repositories {
+  mavenCentral()
 }
+
+dependencies {
+  compile 'org.apache.commons:commons-lang3:3.6'
+}
+
+task hello {
+  group 'greeting'
+  description 'Greets you.'
+  doLast { println 'Hello! How are you doing?' }
+}
+
 task fileCheck {
-    group 'plugin'
-        description 'Checks if a file is present or not !'
-    // Create a File object representing the folder
-        def testFile = new File( "/Users/tejaswi.konduri/Desktop/Gradle/src/main/java/sampleTest/README.txt" )
-        // If it doesn't exist
-        if( !testFile.exists() ) {
-                //Print a statement ...
-                doLast { println 'README file not present!!!' }
-        }
+  group 'Code Hygene'
+  description 'checks if a README file exists in the project root directory'
+  def testFile = new File("/Users/cina.shahabi/Projects/Gradle/sample-license-gradle-testing/README.txt")    
+}
+
+sourceSets{
+  main.java.srcDir "src/main/java"
+}
+
+jar {
+  from configurations.compile.collect { zipTree it }
+  manifest.attributes "Main-Class": "javaApp.WordSplit"
+}
+
+task wordSplit (type: Exec, dependsOn: jar) {
+  //main = 'javaApp'
+  //classpath = 'build/classes/main'
+  executable 'java'
+  args '-jar', "$jar.archivePath", "TeStInG LOWER upper"
 }
