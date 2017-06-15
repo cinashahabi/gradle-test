@@ -1,5 +1,15 @@
+plugins {
+  id "com.github.hierynomus.license" version "0.14.0"
+  //id "com.github.hierynomus.license-base" version "0.14.0"
+}
+
 apply plugin: 'java'
 apply plugin: 'application'
+
+task wrapper (type: Wrapper) {
+  gradleVersion = '3.5'
+}
+
 
 mainClassName = "javaApp.WordSplit"
 
@@ -37,4 +47,18 @@ task wordSplit (type: Exec, dependsOn: jar) {
   //classpath = 'build/classes/main'
   executable 'java'
   args '-jar', "$jar.archivePath", "TeStInG LOWER upper"
+}
+
+// LICENSE CHECK
+
+licenseMain {
+  outputs.upToDateWhen { false }
+  doFirst {
+    println ">>> If you have any files that have license violations, simply enter the command gradle licenseFormat <<<"
+  }
+}
+
+license {
+  exclude '**/*.properties'
+  // include '*.properties'
 }
